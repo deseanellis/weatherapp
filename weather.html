@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  
+  <link href="https://fonts.googleapis.com/css?family=Chewy|Comfortaa|Orbitron" rel="stylesheet" />
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+  <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+  
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js" ></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" /></script>
+  <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+  <script src="https://raw.githubusercontent.com/deseanellis/weatherapp/master/functions/countryCodes.js"></script>
+  <script src="https://raw.githubusercontent.com/deseanellis/weatherapp/master/functions/index.js"></script>
+  <script src="https://raw.githubusercontent.com/deseanellis/weatherapp/master/functions/jsonRequest.js"></script>
+  
+  <script>
+
+	$(document).ready(function(){
+		//Get Latitude and Longitude
+		
+		var err = false;
+		
+		function success(pos){
+		  var crds = pos.coords
+		   
+		  var lat = crds.latitude;
+		  var lon = crds.longitude;
+		  
+		  startRequest(lat,lon);
+		  
+		}
+
+		function error(pos) {
+		
+			//Default to UK, London
+			var lat = 51.51;
+			var lon = -0.13;
+			
+			startRequest(lat,lon);
+		}
+		
+		navigator.geolocation.getCurrentPosition(success, error);
+		
+		var today = new Date();
+		//Check if it is day or night
+		var isDay = ((today.getHours() >= 19 && today.getHours() <= 23) || (today.getHours() >= 0 && today.getHours() <= 5)) ? false : true;
+		if (isDay) {
+			$("body").addClass("bodyDayImg");
+			$("#mainDiv").addClass("day");
+			$(".subHeadingText").addClass("subDay");
+		} else {
+			$("body").addClass("bodyNightImg");
+			$("#mainDiv").addClass("night");
+			$(".subHeadingText").addClass("subNight");
+		}
+	});
+  </script>
+  <style>
+  
+	body {  
+		background-repeat: repeat-y repeat-x;
+		padding: 0px 0px 0px 0px;
+		heigth: 100%;
+		font-family: 'Comfortaa', cursive;
+		font-size: 1.2em;
+	}
+	
+	.bodyDayImg {
+		background-image: url("https://tinyurl.com/jetec2t");
+	}
+	
+	.bodyNightImg {
+		background-image: url("https://tinyurl.com/j97spfg");
+	}
+	
+	hr { 
+	  border: 0; 
+	  height: 1px; 
+	  background-image: -webkit-linear-gradient(left, #f0f0f0, #fff, #f0f0f0);
+	  background-image: -moz-linear-gradient(left, #f0f0f0, #fff, #f0f0f0);
+	  background-image: -ms-linear-gradient(left, #f0f0f0, #fff, #f0f0f0);
+	  background-image: -o-linear-gradient(left, #f0f0f0, #fff, #f0f0f0); 
+	}
+	
+	#banner {
+		background-image: url("https://tinyurl.com/jb6sc47");
+		height: 86px;
+		padding: 30px 0px 30px 0px;
+		margin-bottom: 10px;
+	}
+	
+	.bannerText {
+		border-bottom: 1px dashed #FFF;
+		border-top: 1px dashed #FFF;
+		color: #FFF;
+		width: 50%;
+		margin: 0 auto;
+		padding: 5px 0px 5px 0px;
+		font-family: 'Chewy', cursive;
+		margin-top: -15px;
+		font-size: 1.8em;
+	}
+	#weather-bg-image {
+		padding: 0px;
+	}
+	
+	#mainDiv {
+		padding: 50px 20px 50px 20px;
+		-webkit-box-shadow: inset -1px -1px 22px 0px rgba(0,0,0,0.75);
+		-moz-box-shadow: inset -1px -1px 22px 0px rgba(0,0,0,0.75);
+		box-shadow: inset -1px -1px 22px 0px rgba(0,0,0,0.75);
+	}
+	
+	.day {
+		background: #2894DC; 
+		background: -webkit-linear-gradient(top, #79C3F2, #2894DC);
+		background: linear-gradient(top, #79C3F2, #2894DC);
+		color: #000;
+	}
+	
+	.cloudy {
+		background: #ABABAB; 
+		background: -webkit-linear-gradient(top, #D9D9D9, #ABABAB);
+		background: linear-gradient(top, #D9D9D9, #ABABAB);
+		color: #000;
+	}
+	
+	.night {
+		background: #000B16; 
+		background: -webkit-linear-gradient(top, #002A52, #000B16);
+		background: linear-gradient(top, #002A52, #000B16);
+		color: #FFF;
+	}
+	
+	#subInfo {
+		border-radius: 4px;
+		border: 1px solid #FFF;
+		padding: 25px 10px 25px 10px;
+	}
+	
+	.subInfoCell {
+		border-radius: 4px;
+		border: 1px solid #FFF;
+		background: rgba(255,255,255,0.2);
+		padding: 5px;
+		min-height: 80px;
+		margin: 7px 0px 7px 0px;
+	}
+	
+	.subInfoCell hr {
+		margin-top: 3px;
+		margin-bottom: 5px;
+	}
+	.subHeadingText {
+		font-family: 'Orbitron', sans-serif;
+		font-size: 1.1em;
+		font-weight: bold;
+	}
+	
+	.subDay {
+		color: darkgreen;
+	}
+	
+	.subCloudy {
+		color: black;
+	}
+	
+	.subNight {
+		color: rgb(255,214,2);
+	}
+	#footer {
+		margin-top: 50px;
+		border-radius: 8px;
+		border: 1px solid #FFF;
+		background: rgba(255,255,255,0.2);
+		padding: 10px;
+		font-size: 0.7em;
+	}
+  </style>
+  <title>Weather API App</title>
+</head>
+<body>
+
+	<div class="container">
+		<div class="row">
+			<div id="mainDiv" class="col-md-6 col-md-offset-3" style="min-height: 100vh;">
+				<div class="container-fluid">
+					<div class="row">
+						<div id="banner" class="col-md-12 text-center">
+							<div class="bannerText">
+								<i class="fa fa-free-code-camp" aria-hidden="true"></i> Local Weather App
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div id="weather-data-grey" class="col-md-12 text-center">
+							<span id = "currentDate">[Current Date: JSON Pending...]</span>
+							<br />
+							<strong>Your current location: </strong><span id = "currentLocation">[Current Location: JSON Pending...]</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12 text-center">
+							<img id="weatherIcon" src="#" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12 text-center">
+							<span id="weatherDesc">[Weather Description: JSON Pending...]</span>
+							<br />
+							<strong>Time of Last Update: </strong><span id = "updateTime">[Last Update Time: JSON Pending...]</span>
+						</div>
+					</div>
+					
+					<hr style="margin-bottom: 8px"/>
+					<div style="margin-bottom: 10px; text-align:center; text-transform: uppercase; font-weight: bold">
+						Refresh to Update - Please allow for use of location.
+					</div>
+					<div id="subInfo" class="row">
+						<div class="col-md-12 text-center">
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col-md-4">
+										<div class="col-md-12 subInfoCell">
+											<span class="subHeadingText"><i class="fa fa-thermometer-empty" aria-hidden="true"></i> Temperature</span>
+											<hr />
+											<span id="temp">[Temperature: JSON Pending...]</span>
+											<br />
+											<input id="tempType" type="checkbox" checked data-toggle="toggle" 
+											data-size="mini" data-off="<sup>o</sup>C" data-on="<sup>o</sup>F" data-height="10"
+											data-onstyle="success" data-offstyle="danger"
+											>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 subInfoCell">
+											<span class="subHeadingText"><i class="fa fa-paper-plane" aria-hidden="true"></i> Wind Speed</span>
+											<hr />
+											<span id="wind">[Wind Speed: JSON Pending...]</span>
+											<br />
+											<input id="windType" type="checkbox" checked data-toggle="toggle" 
+											data-size="mini" data-off="m/s" data-on="kns" data-height="10"
+											data-onstyle="success" data-offstyle="danger"
+											>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 subInfoCell">
+											<span class="subHeadingText"><i class="fa fa-tint" aria-hidden="true"></i> Humidity</span>
+											<hr />
+											<span id="humidity">[Humidity: JSON Pending...]</span>
+											<br />
+											(Relative)
+										</div>
+										
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div id="footer" class="row">
+						<div class="col-md-12 text-center">
+							Local Weather Application built as part of Free Code Camp: Front-End Development Certification by DeSean Ellis.
+							<br />
+							{dRe...} Copyright &copy; 2017. All Rights Reserved.
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	<div>
+	
+</body>
+</html>
