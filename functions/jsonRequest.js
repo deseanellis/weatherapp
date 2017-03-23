@@ -2,8 +2,9 @@
 function startRequest(lat,lon){
   //OpenWeather API Key
   var appid = "93ed5f4755afc85d10e401695df1a93c";
-		  
-  var jsonURL = "http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=" + appid;
+
+  var jsonURLPrefix = "https://crossorigin.me/";
+  var jsonURL = jsonURLPrefix + "http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=" + appid;
   
   $.getJSON( jsonURL, function( json ) {
 	//Get and Set Values using JSON object as required
